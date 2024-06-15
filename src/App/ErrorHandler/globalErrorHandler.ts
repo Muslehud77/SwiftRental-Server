@@ -68,13 +68,13 @@ export const globalErrorHandler: ErrorRequestHandler = (
       
   }
 
-  console.log(err.message);
+  // console.log(err.message);
 
   return res.status(statusCode).json({
     success: false,
     message: message,
     errorSource,
-    err,
+    // err,
     stack: configs.node_env === 'development' ? err?.stack : null,
   });
 };
