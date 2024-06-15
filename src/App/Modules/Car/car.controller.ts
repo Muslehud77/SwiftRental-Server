@@ -58,7 +58,7 @@ const getAllCars = catchAsync(async (req, res) => {
   const data = {
     success: true,
     statusCode: 200,
-    message: 'A Car retrieved successfully',
+    message: 'Cars retrieved successfully',
     data: result,
   };
   sendResponse<TCar[]>(res, data);

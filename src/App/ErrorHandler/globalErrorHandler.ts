@@ -68,6 +68,8 @@ export const globalErrorHandler: ErrorRequestHandler = (
       
   }
 
+  console.log(err.message);
+
   return res.status(statusCode).json({
     success: false,
     message: message,
