@@ -28,7 +28,7 @@ export const Auth = (...requiredRoles: TRequiredRoles[]) => {
     };
     
     const decode = jwt.verify(token, configs.jwt_access_secret) as JwtPayload;
-    
+     
     if (!decode) {
       throw new AppError(
         httpStatus.UNAUTHORIZED,
@@ -47,6 +47,8 @@ export const Auth = (...requiredRoles: TRequiredRoles[]) => {
         'You have no access to this route',
       );
     }
+
+    req.user = decode as JwtPayload;
 
     next();
   });
