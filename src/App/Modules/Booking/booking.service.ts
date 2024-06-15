@@ -55,7 +55,7 @@ const bookACarIntoDB = async (
   try {
     session.startTransaction();
 
-    const isCarAvailable = await Car.findById({ _id: data.car }, { session });
+    const isCarAvailable = await Car.findById({ _id: data.car });
 
     if (!isCarAvailable || isCarAvailable?.status !== 'available') {
       throw new AppError(
@@ -69,13 +69,16 @@ const bookACarIntoDB = async (
       { status: 'unavailable' },
       { session },
     );
+     
+    
 
     if (!carBooking) {
       throw new AppError(400, 'Could not book the car');
     }
     const result = await Booking.create([data], { session }) as unknown as TBookingResponse[];
 
-    if(result.length){
+    if(!result.length){
+        
         throw new AppError(400, 'Could not book the car');
     }
     await session.commitTransaction();
@@ -85,21 +88,25 @@ const bookACarIntoDB = async (
     const booking = await getBookingByIdFromDB(result[0]._id)
 
     return booking;
-  } catch (err) {
+  } catch (err:any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new AppError(400, 'Could not book the car');
+    throw new AppError(400, err.message || 'Could not book the car');
   }
 };
 
 
 
 const returnTheCar = async (returnData: TReturnData) => {
+
+
   const session = await mongoose.startSession();
 
   try {
-    const booking = await Booking.findById({ _id: returnData.bookingId });
 
+    session.startTransaction()
+    const booking = await Booking.findById({ _id: returnData.bookingId });
+  
     if (!booking) {
       throw new AppError(httpStatus.NOT_FOUND, 'Booking not found!');
     }
@@ -113,9 +120,14 @@ const returnTheCar = async (returnData: TReturnData) => {
     const startTime = new Date(`1970-01-01T${booking.startTime}`); //1970-01-01T05:00:00.000Z
     const endTime = new Date(`1970-01-01T${returnData.endTime}`); //  1970-01-01T07:00:00.000Z
 
-    const timeDifferenceInHours =
-      endTime.getTime() - startTime.getTime() / (1000 * 60 * 60);
 
+
+    const timeDifference =
+      endTime.getTime() - startTime.getTime() ;
+
+      const timeDifferenceInHours = timeDifference / 3600000;
+
+    
     const totalCost = pricePerHour * timeDifferenceInHours;
 
     const commitBooking = await Booking.findByIdAndUpdate(
@@ -137,10 +149,10 @@ const returnTheCar = async (returnData: TReturnData) => {
     await session.endSession();
       const bookingData = await getBookingByIdFromDB(returnData.bookingId);
     return bookingData;
-  } catch (err) {
+  } catch (err:any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new AppError(400, 'Could not end the booking');
+    throw new AppError(400, err.message || 'Could not end the booking!');
   }
 };
 

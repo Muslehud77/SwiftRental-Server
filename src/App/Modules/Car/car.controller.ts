@@ -20,7 +20,7 @@ const createACar = catchAsync(async(req,res)=>{
     sendResponse<TCar>(res, data);
 })
 
-
+//*Route: /api/cars/:id(PUT) 
 const updateACar = catchAsync(async(req,res)=>{
     const id = req.params.id
     const carData = req.body

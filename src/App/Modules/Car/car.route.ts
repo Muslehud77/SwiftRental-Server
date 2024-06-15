@@ -9,6 +9,10 @@ import { bookingValidation } from '../Booking/booking.validation';
 
 const router = express.Router();
 
+//*Route: /api/cars/return(PUT)
+
+router.put('/return', Auth(USER_ROLE.admin),validateRequest(bookingValidation.returnCarValidation), bookingControllers.returnTheCar);
+
 router.post(
   '/',
   Auth(USER_ROLE.admin),
@@ -20,6 +24,7 @@ router.get('/', carControllers.getAllCars);
 
 router.get('/:id', carControllers.getACarById);
 
+//*Route: /api/cars/:id(PUT)
 router.put(
   '/:id',
   Auth(USER_ROLE.admin),
@@ -28,7 +33,6 @@ router.put(
 );
 
 router.delete('/:id', Auth(USER_ROLE.admin), carControllers.deleteACar);
-router.put('/return', Auth(USER_ROLE.admin),validateRequest(bookingValidation.returnCarValidation), bookingControllers.returnTheCar);
 
 
 export const CarRoutes = router;

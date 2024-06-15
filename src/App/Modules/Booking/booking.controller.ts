@@ -68,10 +68,12 @@ const getAllBookings = catchAsync(async (req, res) => {
   sendResponse<TBooking[]>(res, data);
 });
 
+
+//*Route: /api/cars/return(PUT)
 const returnTheCar = catchAsync(async (req, res) => {
 
   const returnData = req.body;
-  
+
 
   const result = (await bookingServices.returnTheCar(
    returnData
