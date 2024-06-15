@@ -53,8 +53,10 @@ const refreshToken = catchAsync(async (req, res) => {
     success: true,
     statusCode: 200,
     message: 'Token updated successfully',
+    data: [],
     token : result
   };
+  
   sendResponse(res, data);
 });
 

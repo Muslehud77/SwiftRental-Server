@@ -21,7 +21,6 @@ export const sendResponse = <T>(res: Response, data: TData<T>) => {
      });
   }
   
-  console.log(data);
 
   res.status(data.statusCode).json({
     success: data.success,
