@@ -8,13 +8,25 @@ import { TUser } from './../User/user.interface';
 const createUser = catchAsync(async (req, res) => {
   const userData = req.body;
 
-  const result = await authServices.createUserIntoDB(userData) as unknown as TUserResponse ;
+  const { user, refreshToken, accessToken } =
+    (await authServices.createUserIntoDB(userData)) as unknown as {
+      user: TUserResponse;
+      refreshToken: string;
+      accessToken:string
+    }; ;
  
+   res.cookie('refreshToken', refreshToken, {
+     secure: configs.node_env === 'production',
+     httpOnly: true,
+     maxAge: 1000 * 60 * 60 * 24 * 365,
+   });
+
   const data = {
-    success: true, 
+    success: true,
     statusCode: 201,
     message: 'User registered successfully',
-    data: result,
+    data: user,
+    token: accessToken,
   };
   sendResponse<TUserResponse>(res, data);
 });
@@ -22,20 +34,21 @@ const createUser = catchAsync(async (req, res) => {
 const userSignIn = catchAsync(async (req, res) => {
   const userData = req.body;
 
-  const { rest , accessToken, refreshToken } =
+  const { user , accessToken, refreshToken } =
     await authServices.signIn(userData);
 
-   res.cookie("refreshToken",refreshToken,{
-    secure: configs.node_env === "production",
-    httpOnly: true
-   })
+   res.cookie('refreshToken', refreshToken, {
+     secure: configs.node_env === 'production',
+     httpOnly: true,
+     maxAge: 1000 * 60 * 60 * 24 * 365,
+   });
 
 
   const data = {
     success: true,
     statusCode: 200,
     message: 'User logged in successfully',
-    data: rest as TUser,
+    data: user as TUser,
     token: accessToken,
   };
   sendResponse<TUser>(res, data);

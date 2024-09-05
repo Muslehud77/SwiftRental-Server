@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unsafe-optional-chaining */
 import { FilterQuery, Query, model } from "mongoose";
 
 

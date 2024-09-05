@@ -16,7 +16,13 @@ const deleteUserInDB = async (id:string) => {
     return result
 };
 
+const getAllUsersFromDB = async () => {
+  const result = await User.find();
+  return result;
+};
+
 export const userServices = {
   updateUserIntoDB,
   deleteUserInDB,
+  getAllUsersFromDB,
 };

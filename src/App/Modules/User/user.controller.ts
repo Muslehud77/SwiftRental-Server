@@ -34,8 +34,22 @@ const deleteUser = catchAsync(async (req, res) => {
   sendResponse(res, data);
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await userServices.getAllUsersFromDB();
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'Users retrieved successfully',
+    data: result,
+  };
+  sendResponse(res, data);
+});
+
+
 
 export const userController = {
   updateUser,
-  deleteUser
-}
+  deleteUser,
+  getAllUsers,
+};

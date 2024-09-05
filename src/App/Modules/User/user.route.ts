@@ -2,12 +2,13 @@ import express from "express"
 import { userController } from "./user.controller"
 import { validateRequest } from "../../Middlewares/validateRequest"
 import { userValidation } from "./user.validation"
+import { Auth } from "../../Middlewares/auth"
 
 const router = express.Router()
 
-router.patch('/:id',validateRequest(userValidation.updateUserValidation),userController.updateUser)
-router.delete('/:id',userController.deleteUser)
-
+router.get('/', Auth('admin'), userController.getAllUsers);
+router.patch('/:id',Auth("admin","user"),validateRequest(userValidation.updateUserValidation),userController.updateUser)
+router.delete('/:id',Auth("admin"),userController.deleteUser)
 
 
 export const UserRouter = router

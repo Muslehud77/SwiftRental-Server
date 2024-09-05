@@ -1,6 +1,7 @@
 import { Model, Types } from 'mongoose';
 
 export interface TUser {
+  _id?: string;
   name: string;
   email: string;
   role: 'admin' | 'user';
