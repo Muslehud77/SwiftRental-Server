@@ -21,8 +21,22 @@ const getAllUsersFromDB = async () => {
   return result;
 };
 
+const changeStatusOfUserInDB = async (
+  id: string,
+  status: { status: 'in-progress' | 'blocked' },
+) => {
+  await User.isUserExists(id);
+
+  const result = await User.findByIdAndUpdate({ _id: id }, status, {
+    new: true,
+  });
+  return result;
+};
+
+
 export const userServices = {
   updateUserIntoDB,
   deleteUserInDB,
   getAllUsersFromDB,
+  changeStatusOfUserInDB,
 };

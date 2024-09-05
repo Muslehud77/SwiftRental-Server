@@ -137,6 +137,7 @@ const changeRole = async (
       new: true,
     },
   );
+
   return result;
 };
 

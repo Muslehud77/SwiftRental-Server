@@ -9,11 +9,11 @@ const router = express.Router()
 router.get('/', Auth('admin'), userController.getAllUsers);
 router.patch('/:id',Auth("admin","user"),validateRequest(userValidation.updateUserValidation),userController.updateUser)
 router.delete('/:id',Auth("admin"),userController.deleteUser)
-// router.patch(
-//   '/status/:id',
-//   Auth('admin'),
-//   validateRequest(userValidation.updateUserValidation),
-//   userController.changeStatus,
-// );
+router.patch(
+  '/status/:id',
+  Auth('admin'),
+  validateRequest(userValidation.updateUserValidation),
+  userController.changeStatus,
+);
 
 export const UserRouter = router
