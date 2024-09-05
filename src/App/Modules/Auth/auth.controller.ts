@@ -74,6 +74,29 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 
 
+const changeRole = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const password = req.body.password;
+  const role = req.body.role
+  const currentUser = req.user;
+  const currentUserId = currentUser.id;
+
+  const result = (await authServices.changeRole(
+    id,
+    currentUserId,
+    password,
+    role,
+  )) as TUser;
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'User role updated successfully',
+    data: result,
+  };
+
+  sendResponse<TUser>(res, data);
+});
 
 
 
@@ -83,4 +106,5 @@ export const authController = {
   createUser,
   userSignIn,
   refreshToken,
+   changeRole,
 };

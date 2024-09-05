@@ -100,8 +100,49 @@ const refreshToken = async (refreshToken: string) => {
   return token;
 };
 
+
+const changeRole = async (
+  id: string,
+  currentUserId: string,
+  password: string,
+  role :string
+) => {
+  const isUserExists = await User.isUserExists(id);
+
+  const authorizedUser = await User.findById(currentUserId).select(
+    'password status isDeleted',
+  );
+
+  if (
+    !authorizedUser ||
+    authorizedUser.status === 'blocked' ||
+    authorizedUser.isDeleted
+  ) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "Authorized user is not authorized to update a user's role!",
+    );
+  }
+
+  const checkPassword = await bcrypt.compare(password, authorizedUser.password);
+
+  if (!checkPassword) {
+    throw new AppError(httpStatus.FORBIDDEN, 'Password is incorrect!');
+  }
+
+  const result = await User.findByIdAndUpdate(
+    { _id: isUserExists._id },
+    {role },
+    {
+      new: true,
+    },
+  );
+  return result;
+};
+
 export const authServices = {
   createUserIntoDB,
   signIn,
   refreshToken,
+  changeRole,
 };

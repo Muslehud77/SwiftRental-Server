@@ -14,6 +14,15 @@ const UserSignInValidation = z.object({
   }),
 });
 
+
+const ChangeRoleValidation = z.object({
+  body: z.object({
+   role: z.enum(["admin","user"]),
+   password: z.string()
+})
+});
+
 export const authValidation = {
-    UserSignInValidation
+    UserSignInValidation,
+    ChangeRoleValidation
 }
