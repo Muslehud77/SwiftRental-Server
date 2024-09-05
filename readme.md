@@ -122,7 +122,7 @@ SwiftRental
    ```env
    NODE_ENV=development
    PORT=6000
-   DATABASE_URI=mongodb+srv://SwiftRental:WtLcgHI1QcVMHkC6@cluster0.q9bdeff.mongodb.net/SwiftRental?retryWrites=true&w=majority&appName=Cluster0
+   DATABASE_URI=your_mongodb_uri
    HASH_SALT=12
    DEFAULT_PASS=swift123
    JWT_ACCESS_SECRET=647ce085b2f735579953875d0c76d9a69d420bb229a733ca8aa70595e709c082
