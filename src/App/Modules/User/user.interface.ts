@@ -10,6 +10,7 @@ export interface TUser {
   address: string;
   isDeleted?: boolean;
   status?: 'in-progress' | 'blocked';
+  image: { url: string; blurHash: string };
 }
 
 export interface TUserResponse extends TUser {

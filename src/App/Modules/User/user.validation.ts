@@ -45,6 +45,16 @@ const createUserValidation = z.object({
       .default('in-progress')
       .optional(),
     isDeleted: z.boolean().default(false).optional(),
+    image: z.object({
+      url: z.string({
+        required_error: 'Image URL is required',
+        invalid_type_error: 'Image URL must be a string',
+      }),
+      blurHash: z.string({
+        required_error: 'Image blurHash is required',
+        invalid_type_error: 'Image blurHash must be a string',
+      }),
+    }).optional(),
   }),
 });
 

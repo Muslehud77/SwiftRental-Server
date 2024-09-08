@@ -9,14 +9,18 @@ const userSchema = new Schema<TUser, TUserStatics>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    role: { type: String, enum: ['admin', 'user'], default: 'user' }, 
+    role: { type: String, enum: ['admin', 'user'], default: 'user' },
     password: { type: String, required: true, select: 0 },
-    phone: { type: String }, 
-    address: { type: String }, 
+    phone: { type: String },
+    address: { type: String },
     status: {
       type: String,
       enum: ['in-progress', 'blocked'],
       default: 'in-progress',
+    },
+    image: {
+      url: { type: String },
+      blurHash: { type: String },
     },
     isDeleted: { type: Boolean, default: false },
   },

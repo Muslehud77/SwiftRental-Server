@@ -1,11 +1,15 @@
 import { Model } from 'mongoose';
 export interface TCar {
   name: string;
+  model: string;
+  year: string;
+  carType: string;
   description: string;
   color: string;
-  isElectric: boolean;
   features: string[];
-  pricePerHour: number;
+  images: { url: string; blurHash: string }[];
+  pricePerHour: string;
+  pricePerDay: string;
   status?: 'available' | 'not-available';
   isDeleted: boolean;
 }
