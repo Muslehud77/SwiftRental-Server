@@ -1,6 +1,6 @@
 
 import catchAsync from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
+import { sendResponse, TMeta } from "../../utils/sendResponse";
 import { TCar } from "./car.interface";
 import { carServices } from "./car.service";
 
@@ -52,15 +52,18 @@ const getACarById = catchAsync(async (req, res) => {
 
 
 const getAllCars = catchAsync(async (req, res) => {
+  const query = req.query
+  const {result,meta} = (await carServices.getAllCarsFromDB(query)) as {result:TCar[],meta:TMeta};
 
-  const result = (await carServices.getAllCarsFromDB()) as TCar[];
+  
 
   const data = {
     success: true,
     statusCode: 200,
     message: 'Cars retrieved successfully',
-    data: result,
-  };
+    meta: meta,
+    data: result
+    };
   sendResponse<TCar[]>(res, data);
 });
 

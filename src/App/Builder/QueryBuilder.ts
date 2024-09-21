@@ -7,10 +7,12 @@ import { FilterQuery, Query, model } from "mongoose";
 export class QueryBuilder<T> {
   public modelQuery: Query<T[], T>;
   public query: Record<string, unknown>;
-
+ 
   constructor(modelQuery: Query<T[], T>, query: Record<string, unknown>) {
-    (this.modelQuery = modelQuery), (this.query = query);
+    (this.modelQuery = modelQuery), (this.query = query) 
+  
   }
+
 
   search(searchableFields: string[]) {
     const { searchTerm } = this?.query;
@@ -28,18 +30,52 @@ export class QueryBuilder<T> {
   }
 
   filter() {
-    const { searchTerm, sort, limit, page, fields, ...queryObject } =
-      this?.query;
+    const {
+      searchTerm,
+      sort,
+      limit,
+      page,
+      fields,
+      startDate,
+      endDate,
+      priceRange,
+      overlappingBookings,
+      ...queryObject
+    } = this?.query;
 
-      if(queryObject.carId){
-        queryObject.car = queryObject.carId; // Add new key with the same value
-        delete queryObject.carId; // Remove the old key
-      }
+    
 
-      console.log(queryObject);
+    // Step 1: Handle the carId mapping
+    if (queryObject.carId) {
+      queryObject.car = queryObject.carId; // Add new key with the same value
+      delete queryObject.carId; // Remove the old key
+    }
 
+    // Step 2: Handle priceRange filter
+    if (priceRange) {
+      const [minPrice, maxPrice] = (priceRange as string).split(',').map(Number);
+      queryObject.pricePerDay = {
+        $gte: minPrice,
+        ...(maxPrice && { $lte: maxPrice }), // Add $lte only if maxPrice exists
+      };
+    }
+
+    //  if ((overlappingBookings as {carId:string}[])?.length) {
+ 
+    //     const bookedCarIds = (overlappingBookings as {carId:string}[]).map((booking) => booking.carId);
+        
+    //     queryObject._id = { $nin: bookedCarIds }; // Exclude these cars from the result
+
+      
+
+    //   }
+    
+
+    // Step 3: Apply the queryObject to filter the cars
     this.modelQuery = this.modelQuery.find(queryObject as FilterQuery<T>);
 
+
+   
     return this;
   }
 
@@ -76,6 +112,17 @@ export class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.select(fieldsToShow);
 
     return this;
+  }
+
+  async countTotal() {
+    const totalQueries = this.modelQuery.getFilter();
+    const total = await this.modelQuery.model.countDocuments(totalQueries);
+    const { page, limit } = this?.query;
+    const pageNumber = Number(page as string) || 1;
+    const limitDataCount = Number(limit as string) || 10;
+    const totalPage = Math.ceil(total / limitDataCount);
+
+    return { total, pageNumber, limitDataCount, totalPage };
   }
 }
 

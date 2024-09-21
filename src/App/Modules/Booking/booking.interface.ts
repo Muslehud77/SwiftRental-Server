@@ -1,13 +1,23 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 
 export interface TBooking {
-  date: string;
-  startTime: string;
-  endTime?: string;
   user: Types.ObjectId;
-  car: Types.ObjectId;
-  totalCost? : number
+  carId: Types.ObjectId;
+  origin?: string;
+  destination?: string;
+  drivingLicense: string;
+  nidOrPassport: string;
+  startDate: Date;
+  endDate: Date;
+  totalCost: number;
+  additionalFeatures?: Array<{
+    name: string;
+    price: number;
+  }>;
+  paymentType?: 'cash' | 'stripe';
+  paymentId?: string;
 }
+
 
 export interface TBookingResponse extends TBooking {
   _id: Types.ObjectId;

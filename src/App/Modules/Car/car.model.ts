@@ -7,9 +7,8 @@ const carSchema = new Schema<TCar, TCarStatics>(
   {
     name: { type: String, required: true },
     model: { type: String, required: true },
-    year: { type: String, required: true },
     carType: { type: String, required: true },
-
+    year: { type: String, required: true },
     description: { type: String, required: true },
     color: { type: String, required: true },
     images: [

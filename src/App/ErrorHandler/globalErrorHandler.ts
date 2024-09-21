@@ -16,6 +16,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   next,
 ) => {
   let statusCode = err.statusCode || 500;
+ 
   let message = err.message || 'Something went wrong!';
 
   let errorSource: TErrorSource = [

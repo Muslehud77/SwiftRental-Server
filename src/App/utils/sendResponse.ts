@@ -1,13 +1,20 @@
 import { Response } from "express"
 
 
+export type TMeta = {
+  total: number;
+  pageNumber: number;
+  limitDataCount: number;
+  totalPage: number;
+};
 
 type TData<T> = {
     success: boolean;
     statusCode : number;
     message : string;
     data : T
-    token? : string
+    token? : string;
+    meta?: TMeta
 }
 
 export const sendResponse = <T>(res: Response, data: TData<T>) => {
@@ -26,6 +33,7 @@ export const sendResponse = <T>(res: Response, data: TData<T>) => {
     success: data.success,
     statusCode: data.statusCode,
     message: data?.message || 'Request Successful',
+    meta:(data.meta ? data.meta : {}),
     data: data.data,
     ...(data.token && {token : data?.token})
   });

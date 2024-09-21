@@ -48,13 +48,13 @@ const createCarValidation = z.object({
         }),
       )
       .min(1, 'Features must contain at least one item'),
-    pricePerHour: z.number({
+    pricePerHour: z.string({
       required_error: 'Price per hour is required',
-      invalid_type_error: 'Price per hour must be a number',
+      invalid_type_error: 'Price per hour must be a string',
     }),
-    pricePerDay: z.number({
+    pricePerDay: z.string({
       required_error: 'Price per day is required',
-      invalid_type_error: 'Price per day must be a number',
+      invalid_type_error: 'Price per day must be a string',
     }),
     status: z
       .enum(['available', 'not-available'], {
