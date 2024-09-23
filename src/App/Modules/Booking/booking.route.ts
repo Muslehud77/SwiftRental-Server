@@ -11,6 +11,13 @@ const router = express.Router();
 router.get("/",Auth(USER_ROLE.admin),bookingControllers.getAllBookings)
 router.post("/",Auth(USER_ROLE.user),validateRequest(bookingValidation.createBookingValidation),bookingControllers.bookACar)
 router.get("/my-bookings",Auth(USER_ROLE.user),bookingControllers.getBookingsByUserId)
+router.patch(
+  '/:id',
+  Auth(USER_ROLE.user),
+  validateRequest(bookingValidation.modifyBookingValidation),
+  bookingControllers.modifyBooking,
+);
+router.delete("/:id",Auth(USER_ROLE.user),bookingControllers.deleteBookingById)
 
 
 export const BookingRoutes = router;

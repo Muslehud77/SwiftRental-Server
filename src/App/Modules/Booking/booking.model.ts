@@ -4,8 +4,8 @@ import { TBooking } from './booking.interface';
 
 const bookingSchema = new Schema<TBooking>(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
-    carId: { type: Schema.Types.ObjectId, ref: 'Cars', required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    carId: { type: Schema.Types.ObjectId, ref: 'Car', required: true },
     origin: { type: String, default: '' }, 
     destination: { type: String, default: '' },
     drivingLicense: { type: String, required: true },
@@ -25,6 +25,8 @@ const bookingSchema = new Schema<TBooking>(
       default: 'cash', 
     },
     paymentId: { type: String, default: "" },
+    status: { type: String, default: "pending" },
+    completedPayment:{type:Boolean,default:false}
    
   },
   {

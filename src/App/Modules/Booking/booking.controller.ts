@@ -1,10 +1,4 @@
-// const bookingServices = {
-//   returnTheCar,
-//   getUsersBookingsFromDB,
-//   bookACarIntoDB,
-//   getAllBookingsFromDB,
-//   getBookingByIdFromDB,
-// };
+
 
 import catchAsync from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
@@ -28,6 +22,21 @@ const getBookingsByUserId = catchAsync(async(req,res)=>{
      };
 
      sendResponse<TBooking[]>(res, data);
+})
+const deleteBookingById = catchAsync(async(req,res)=>{
+   
+     const bookingId = req.params.id;
+
+     const result = await bookingServices.deleteBooking(bookingId)
+
+     const data = {
+       success: true,
+       statusCode: 200,
+       message: 'Booking canceled successfully!',
+       data: result,
+     };
+
+     sendResponse(res, data);
 })
 
 
@@ -69,6 +78,27 @@ const getAllBookings = catchAsync(async (req, res) => {
 });
 
 
+const modifyBooking = catchAsync(async (req, res) => {
+  const bookingData = req.body;
+  const bookingId = req.params.id
+  const user = req.user
+  const result = (await bookingServices.modifyBookingInDB(
+    bookingData,
+    bookingId,
+    user
+  )) as unknown as TBooking;
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'Booking modified successfully',
+    data: result,
+  };
+
+  sendResponse<TBooking>(res, data);
+});
+
+
 //*Route: /api/cars/return(PUT)
 const returnTheCar = catchAsync(async (req, res) => {
 
@@ -95,4 +125,6 @@ export const bookingControllers = {
   returnTheCar,
   bookACar,
   getAllBookings,
+  deleteBookingById,
+  modifyBooking,
 };

@@ -12,6 +12,8 @@ const createACarInDB = async (carData: TCar) => {
 };
 
 const getAllCarsFromDB = async (query: Record<string, unknown>) => {
+
+
   const session = await mongoose.startSession(); // Start a new mongoose session
   session.startTransaction(); // Start a transaction
 
@@ -54,9 +56,6 @@ const getAllCarsFromDB = async (query: Record<string, unknown>) => {
     const cars = await carQuery.modelQuery;
     const meta = await carQuery.countTotal();
 
-
-    
-
     let result = [...cars] as unknown as TCar[];
 
     if (overlappingBookings.length) {
@@ -67,18 +66,13 @@ const getAllCarsFromDB = async (query: Record<string, unknown>) => {
 
       // Modify the result by adding the new key to cars that have overlapping bookings
       result = cars.map(car => {
-          const carObj = car.toObject();
+        const carObj = car.toObject();
         if (overlappingCarIds.includes(car._id.toString())) {
           carObj['availableForTheDateEntered'] =
             'Not available for the date entered';
-
-           
         }
 
-      
-          return carObj;
-        
-
+        return carObj;
       });
     }
 

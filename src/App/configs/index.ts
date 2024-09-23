@@ -12,9 +12,10 @@ const jwt_refresh_secret = process.env.JWT_REFRESH_SECRET as string;
 const jwt_access_expiresIn = process.env.JWT_ACCESS_EXPIRES_IN as string;
 const jwt_refresh_expiresIn = process.env.JWT_REFRESH_EXPIRES_IN as string; 
 const CLIENT_URL = process.env.CLIENT_URL as string
-
+const STRIPE_SECRET = process.env.STRIPE_SECRET as string;
 
 export default {
+  STRIPE_SECRET,
   CLIENT_URL,
   dbUri,
   port,
