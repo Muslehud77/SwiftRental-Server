@@ -18,12 +18,12 @@ const createBookingValidation = z.object({
     endDate: z.string(),
     totalCost: z.number(),
     additionalFeatures: z.array(additionalFeatureSchema).optional(),
-    status: z.enum(['pending' , 'approved' , 'rejected']).optional(),
+    status: z.enum(['pending', 'approved', 'rejected', 'completed']).optional(),
     completedPayment: z.boolean().optional(),
   }),
 });
 
-const modifyBookingValidation = createBookingValidation.deepPartial()
+const modifyBookingValidation = createBookingValidation.deepPartial();
 
 // Validation schema for returning the car
 const returnCarValidation = z.object({

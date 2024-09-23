@@ -6,7 +6,7 @@ const bookingSchema = new Schema<TBooking>(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     carId: { type: Schema.Types.ObjectId, ref: 'Car', required: true },
-    origin: { type: String, default: '' }, 
+    origin: { type: String, default: '' },
     destination: { type: String, default: '' },
     drivingLicense: { type: String, required: true },
     nidOrPassport: { type: String, required: true },
@@ -18,19 +18,22 @@ const bookingSchema = new Schema<TBooking>(
         name: { type: String, required: true },
         price: { type: Number, required: true },
       },
-    ], 
+    ],
     paymentType: {
       type: String,
-      enum: ['cash', 'stripe'], 
-      default: 'cash', 
+      enum: ['cash', 'stripe'],
+      default: 'cash',
     },
-    paymentId: { type: String, default: "" },
-    status: { type: String, default: "pending" },
-    completedPayment:{type:Boolean,default:false}
-   
+    paymentId: { type: String, default: '' },
+    status: {
+      type: String,
+      enum: ['pending' , 'approved' , 'rejected' , 'completed'],
+      default: 'pending',
+    },
+    completedPayment: { type: Boolean, default: false },
   },
   {
-    timestamps: true, 
+    timestamps: true,
   },
 );
 

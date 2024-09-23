@@ -9,7 +9,16 @@ import { Booking } from './booking.model';
 import mongoose from 'mongoose';
 
 const deleteBooking = async (id: string) => {
-  const result = await Booking.deleteOne({ _id: id })
+  const result = await Booking.deleteOne({ _id: id , status:"pending"})
+
+  
+   if (!result.deletedCount) {
+     throw new AppError(
+       400,
+       'Something went wrong',
+     );
+   }
+
   return result;
 };
 
@@ -35,7 +44,7 @@ const getBookingByUserIdFromDB = async (id: string) => {
 
 const modifyBookingInDB = async (bookingData : TBooking, bookingId:string, user:JwtPayload) => {
 
-console.log(user);
+
 
 const booking = await Booking.findOne({_id:bookingId,user:user.id,status:"pending"})
 
@@ -69,7 +78,7 @@ if(!booking){
      ],
    });
 
-   console.log(overlappingBookings);
+  
 
    if(overlappingBookings.length){
     throw new AppError(

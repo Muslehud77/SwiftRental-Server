@@ -17,7 +17,7 @@ export interface TBooking {
   paymentType?: 'cash' | 'stripe';
   paymentId?: string;
   completedPayment:boolean;
-  status: "pending" | "approved" | "rejected";
+  status: "pending" | "approved" | "rejected" | "completed";
 }
 
 

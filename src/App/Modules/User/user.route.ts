@@ -9,7 +9,7 @@ const router = express.Router()
 router.get('/', Auth('admin'), userController.getAllUsers);
 router.patch('/:id',Auth("admin","user"),validateRequest(userValidation.updateUserValidation),userController.updateUser)
 router.delete('/:id',Auth("admin"),userController.deleteUser)
-router.patch(
+router.put(
   '/status/:id',
   Auth('admin'),
   validateRequest(userValidation.updateUserValidation),
