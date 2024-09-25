@@ -14,7 +14,7 @@ export interface TBooking {
     name: string;
     price: number;
   }>;
-  paymentType?: 'cash' | 'stripe';
+  paymentType?: 'cash' | 'stripe' | "Aamar Pay";
   paymentId?: string;
   completedPayment:boolean;
   status: "pending" | "approved" | "rejected" | "completed";

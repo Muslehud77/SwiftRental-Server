@@ -12,6 +12,7 @@ const jwt_refresh_secret = process.env.JWT_REFRESH_SECRET as string;
 const jwt_access_expiresIn = process.env.JWT_ACCESS_EXPIRES_IN as string;
 const jwt_refresh_expiresIn = process.env.JWT_REFRESH_EXPIRES_IN as string;
 const CLIENT_URL = process.env.CLIENT_URL as string;
+const SERVER_URL = process.env.SERVER_URL as string;
 const STRIPE_SECRET = process.env.STRIPE_SECRET as string;
 const AMARPAY_URL = process.env.AMARPAY_URL as string;
 const AMARPAY_STORE_ID = process.env.AMARPAY_STORE_ID as string;
@@ -23,6 +24,7 @@ const AMARPAY_PAYMENT_VERIFY_URL = process.env.AMARPAY_PAYMENT_VERIFY_URL as str
 export default {
   STRIPE_SECRET,
   CLIENT_URL,
+  SERVER_URL,
   dbUri,
   port,
   saltRounds,
