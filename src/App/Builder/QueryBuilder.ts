@@ -60,16 +60,6 @@ export class QueryBuilder<T> {
       };
     }
 
-    //  if ((overlappingBookings as {carId:string}[])?.length) {
- 
-    //     const bookedCarIds = (overlappingBookings as {carId:string}[]).map((booking) => booking.carId);
-        
-    //     queryObject._id = { $nin: bookedCarIds }; // Exclude these cars from the result
-
-      
-
-    //   }
-    
 
     // Step 3: Apply the queryObject to filter the cars
     this.modelQuery = this.modelQuery.find(queryObject as FilterQuery<T>);

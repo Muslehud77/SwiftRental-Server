@@ -24,7 +24,7 @@ const deleteBooking = async (id: string) => {
 
 const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
   const bookingQuery = new QueryBuilder(
-    Booking.find().populate('user').populate('car'),
+    Booking.find().populate('user').populate('carId'),
     query,
   )
     .search([])
@@ -34,7 +34,8 @@ const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
     .fieldQuery();
 
   const result = await bookingQuery.modelQuery;
-  return result;
+    const meta = await bookingQuery.countTotal();
+  return {result,meta};
 };
 
 const getBookingByUserIdFromDB = async (id: string) => {
@@ -46,7 +47,7 @@ const modifyBookingInDB = async (bookingData : TBooking, bookingId:string, user:
 
 
 
-const booking = await Booking.findOne({_id:bookingId,user:user.id,status:"pending"})
+const booking = await Booking.findOne({_id:bookingId,user:user.id})
 
 if(!booking){
     throw new AppError(

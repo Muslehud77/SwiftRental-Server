@@ -1,7 +1,7 @@
 
 
 import catchAsync from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
+import { sendResponse, TMeta } from "../../utils/sendResponse";
 import { TUserRequest } from "../User/user.interface";
 import { TBooking } from "./booking.interface";
 
@@ -63,15 +63,16 @@ const getAllBookings = catchAsync(async (req, res) => {
   const query = req.query;
  
 
-  const result = (await bookingServices.getAllBookingsFromDB(
+  const {result,meta} = (await bookingServices.getAllBookingsFromDB(
     query
-  )) as unknown as TBooking[];
+  )) as unknown as {result:TBooking[],meta:TMeta};
 
   const data = {
     success: true,
     statusCode: 200,
     message: 'Bookings retrieved successfully',
     data: result,
+    meta:meta
   };
 
   sendResponse<TBooking[]>(res, data);
