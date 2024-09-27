@@ -5,19 +5,14 @@ import { TUserRequest } from '../User/user.interface';
 import { TBooking, TBookingResponse, TReturnData } from './booking.interface';
 import { Booking } from './booking.model';
 
-
 import mongoose from 'mongoose';
 
 const deleteBooking = async (id: string) => {
-  const result = await Booking.deleteOne({ _id: id , status:"pending"})
+  const result = await Booking.deleteOne({ _id: id, status: 'pending' });
 
-  
-   if (!result.deletedCount) {
-     throw new AppError(
-       400,
-       'Something went wrong',
-     );
-   }
+  if (!result.deletedCount) {
+    throw new AppError(400, 'Something went wrong');
+  }
 
   return result;
 };
@@ -34,8 +29,8 @@ const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
     .fieldQuery();
 
   const result = await bookingQuery.modelQuery;
-    const meta = await bookingQuery.countTotal();
-  return {result,meta};
+  const meta = await bookingQuery.countTotal();
+  return { result, meta };
 };
 
 const getBookingByUserIdFromDB = async (id: string) => {
@@ -43,56 +38,69 @@ const getBookingByUserIdFromDB = async (id: string) => {
   return result;
 };
 
-const modifyBookingInDB = async (bookingData : TBooking, bookingId:string, user:JwtPayload) => {
+const modifyBookingInDB = async (
+  bookingData: TBooking,
+  bookingId: string,
+  user: JwtPayload,
+) => {
+  const booking = await Booking.findOne({ _id: bookingId, user: user.id });
 
+  if (!booking) {
+    throw new AppError(404, 'Booking not found!');
+  }
 
+  if (bookingData.endDate && bookingData.startDate) {
+    const overlappingBookings = await Booking.find({
+      carId: booking.carId,
+      user: { $ne: user.id },
+      $or: [
+        // Condition 1: Existing booking starts within the new booking's range
+        {
+          startDate: { $lt: new Date(bookingData.endDate) },
+          endDate: { $gte: new Date(bookingData.startDate) },
+        },
+        // Condition 2: Existing booking ends within the new booking's range
+        {
+          startDate: { $lte: new Date(bookingData.endDate) },
+          endDate: { $gt: new Date(bookingData.startDate) },
+        },
+        // Condition 3: Existing booking completely overlaps with new booking
+        {
+          startDate: { $gte: new Date(bookingData.startDate) },
+          endDate: { $lte: new Date(bookingData.endDate) },
+        },
+      ],
+    });
 
-const booking = await Booking.findOne({_id:bookingId,user:user.id})
+    if (overlappingBookings.length) {
+      throw new AppError(
+        400,
+        'Car is already booked within the provided date range',
+      );
+    }
+  }
 
-if(!booking){
-    throw new AppError(
-      404,
-      'Booking not found!',
-    );
-}
+  const result = await Booking.updateOne({ _id: booking._id }, bookingData, {
+    new: true,
+  });
 
+  return result;
+};
+const updateStatusIntoDB = async (
+  bookingData: TBooking,
+ 
+ 
+) => {
+  const booking = await Booking.findOne({ _id: modifyBookingInDB});
 
-   const overlappingBookings = await Booking.find({
-     carId: booking.carId,
-     user: {$ne:user.id},
-     $or: [
-       // Condition 1: Existing booking starts within the new booking's range
-       {
-         startDate: { $lt: new Date(bookingData.endDate) },
-         endDate: { $gte: new Date(bookingData.startDate) },
-       },
-       // Condition 2: Existing booking ends within the new booking's range
-       {
-         startDate: { $lte: new Date(bookingData.endDate) },
-         endDate: { $gt: new Date(bookingData.startDate) },
-       },
-       // Condition 3: Existing booking completely overlaps with new booking
-       {
-         startDate: { $gte: new Date(bookingData.startDate) },
-         endDate: { $lte: new Date(bookingData.endDate) },
-       },
-     ],
-   });
+  if (!booking) {
+    throw new AppError(404, 'Booking not found!');
+  }
+  const result = await Booking.updateOne({ _id: booking._id }, {status:bookingData.status}, {
+    new: true,
+  });
 
-  
-
-   if(overlappingBookings.length){
-    throw new AppError(
-      400,
-      'Car is already booked within the provided date range',
-    );
-   }
-
-   const result = await Booking.updateOne({_id:booking._id},bookingData,{new:true})
-
-   return result
-
-
+  return result;
 };
 
 const bookACarIntoDB = async (
@@ -205,4 +213,5 @@ export const bookingServices = {
   getBookingByUserIdFromDB,
   deleteBooking,
   modifyBookingInDB,
+  updateStatusIntoDB,
 };
