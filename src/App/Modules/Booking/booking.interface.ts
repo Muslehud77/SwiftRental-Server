@@ -1,9 +1,10 @@
 import { Types } from 'mongoose';
+import { TCar } from '../Car/car.interface';
 
 export interface TBooking {
  
   user: Types.ObjectId;
-  carId: Types.ObjectId;
+  carId: Types.ObjectId | TCar;
   origin?: string;
   destination?: string;
   drivingLicense: string;
@@ -33,6 +34,8 @@ export type TBookingData = {
 };
 
 export type TReturnData = {
-  bookingId: Types.ObjectId;
-  endTime: string;
+  _id: Types.ObjectId;
+  endDate: string;
+  paymentType?: 'cash';
+  paymentId?: string;
 };

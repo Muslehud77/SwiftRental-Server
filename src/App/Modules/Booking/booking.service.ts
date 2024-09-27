@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { JwtPayload } from 'jsonwebtoken';
 import { QueryBuilder } from '../../Builder/QueryBuilder';
 import AppError from '../../errors/AppError';
@@ -6,6 +7,7 @@ import { TBooking, TBookingResponse, TReturnData } from './booking.interface';
 import { Booking } from './booking.model';
 
 import mongoose from 'mongoose';
+import { TCar } from '../Car/car.interface';
 
 const deleteBooking = async (id: string) => {
   const result = await Booking.deleteOne({ _id: id, status: 'pending' });
@@ -80,30 +82,25 @@ const modifyBookingInDB = async (
     }
   }
 
-
   const result = await Booking.updateOne({ _id: booking._id }, bookingData, {
     new: true,
   });
 
   return result;
 };
-const updateStatusIntoDB = async (
-  bookingData: TBookingResponse,
- 
- 
-) => {
-
-
+const updateStatusIntoDB = async (bookingData: TBookingResponse) => {
   const booking = await Booking.findById(bookingData._id);
-  
-  console.log(booking)
-  
+
   if (!booking) {
     throw new AppError(404, 'Booking not found!');
   }
-  const result = await Booking.updateOne({ _id: bookingData._id }, {status:bookingData.status}, {
-    new: true,
-  });
+  const result = await Booking.updateOne(
+    { _id: bookingData._id },
+    { status: bookingData.status },
+    {
+      new: true,
+    },
+  );
 
   return result;
 };
@@ -170,10 +167,49 @@ const bookACarIntoDB = async (
   }
 };
 
-
 const returnTheCar = async (returnData: TReturnData) => {
-  console.log({returnData})
-  return null
+  const booking = await Booking.findById(returnData._id).populate('carId');
+
+  if (!booking) {
+    throw new AppError(404, 'Booking not found!');
+  }
+  const startDate = booking.startDate;
+  const endDate = returnData.endDate;
+  const pricePerHour = (booking.carId as TCar).pricePerHour;
+  const pricePerDay = (booking.carId as TCar).pricePerDay;
+  const additionalFeatures = booking.additionalFeatures;
+
+  const tripDuration = dayjs(endDate).isAfter(dayjs(startDate))
+    ? dayjs(endDate).diff(dayjs(startDate), 'hour')
+    : 0;
+
+  const basePrice =
+    tripDuration >= 24
+      ? Math.ceil(tripDuration / 24) * Number(pricePerDay)
+      : tripDuration * Number(pricePerHour);
+
+  const featuresPrice = additionalFeatures?.reduce((total, feature) => {
+    return (
+      total +
+      feature.price *
+        (tripDuration >= 24 ? Math.ceil(tripDuration / 24) : tripDuration)
+    );
+  }, 0);
+
+  const totalCost = basePrice + Number(featuresPrice);
+
+  const data = {totalCost,endDate,status:"completed"} as unknown as Partial<TBooking>
+
+  if(returnData.paymentId){
+    data["paymentId"] = returnData.paymentId
+    data['paymentType'] = returnData.paymentType;
+    data['completedPayment'] = true;
+  }
+
+  const result = await Booking.findByIdAndUpdate({ _id: booking._id }, data,{new:true});
+
+
+  return result;
 };
 
 export const bookingServices = {

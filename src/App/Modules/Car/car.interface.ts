@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 export interface TCar {
-  toObject: any;
+  
   _id: string;
   name: string;
   model: string;

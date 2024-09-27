@@ -33,7 +33,7 @@ const getAllCarsFromDB = async (query: Record<string, unknown>) => {
 
       // Find bookings where there is an overlap
       overlappingBookings = (await Booking.find({
-        status:{$ne:"rejected"},
+        status: { $nin: ['rejected', 'completed'] },
         $or: [
           // New booking starts within an existing booking
           {

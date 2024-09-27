@@ -120,7 +120,7 @@ const returnTheCar = catchAsync(async (req, res) => {
   const data = {
     success: true,
     statusCode: 200,
-    message: 'Car booked successfully',
+    message: 'Car returned successfully',
     data: result,
   };
 
