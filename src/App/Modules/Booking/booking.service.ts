@@ -46,7 +46,7 @@ const modifyBookingInDB = async (bookingData : TBooking, bookingId:string, user:
 
 
 
-const booking = await Booking.findOne({_id:bookingId,user:user.id,status:"pending"})
+const booking = await Booking.findOne({_id:bookingId,user:user.id})
 
 if(!booking){
     throw new AppError(
