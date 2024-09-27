@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 
 export interface TBooking {
+ 
   user: Types.ObjectId;
   carId: Types.ObjectId;
   origin?: string;

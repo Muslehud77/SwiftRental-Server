@@ -28,8 +28,10 @@ const modifyBookingValidation = createBookingValidation.deepPartial();
 // Validation schema for returning the car
 const returnCarValidation = z.object({
   body: z.object({
-    bookingId: z.string(),
-    endTime: z.string(),
+    _id: z.string(),
+    paymentType:z.enum(["cash"]).optional(),
+    paymentId:z.string().optional(),
+    endDate: z.string()
   }),
 });
 

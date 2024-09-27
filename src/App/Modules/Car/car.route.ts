@@ -11,7 +11,7 @@ const router = express.Router();
 
 //*Route: /api/cars/return(PUT)
 
-router.put('/return', Auth(USER_ROLE.admin),validateRequest(bookingValidation.returnCarValidation), bookingControllers.returnTheCar);
+router.patch('/return', Auth(USER_ROLE.admin),validateRequest(bookingValidation.returnCarValidation), bookingControllers.returnTheCar);
 
 router.post(
   '/',

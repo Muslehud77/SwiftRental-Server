@@ -72,9 +72,6 @@ const modifyBookingInDB = async (
       ],
     });
 
-<<<<<<< HEAD
-const booking = await Booking.findOne({_id:bookingId,user:user.id})
-=======
     if (overlappingBookings.length) {
       throw new AppError(
         400,
@@ -82,7 +79,7 @@ const booking = await Booking.findOne({_id:bookingId,user:user.id})
       );
     }
   }
->>>>>>> d2c9d97f27070ae1a49046f912a38097e43403c2
+
 
   const result = await Booking.updateOne({ _id: booking._id }, bookingData, {
     new: true,
@@ -91,16 +88,20 @@ const booking = await Booking.findOne({_id:bookingId,user:user.id})
   return result;
 };
 const updateStatusIntoDB = async (
-  bookingData: TBooking,
+  bookingData: TBookingResponse,
  
  
 ) => {
-  const booking = await Booking.findOne({ _id: modifyBookingInDB});
 
+
+  const booking = await Booking.findById(bookingData._id);
+  
+  console.log(booking)
+  
   if (!booking) {
     throw new AppError(404, 'Booking not found!');
   }
-  const result = await Booking.updateOne({ _id: booking._id }, {status:bookingData.status}, {
+  const result = await Booking.updateOne({ _id: bookingData._id }, {status:bookingData.status}, {
     new: true,
   });
 
@@ -169,45 +170,10 @@ const bookACarIntoDB = async (
   }
 };
 
+
 const returnTheCar = async (returnData: TReturnData) => {
-  // const session = await mongoose.startSession();
-  // try {
-  //   session.startTransaction()
-  //   const booking = await Booking.findById({ _id: returnData.bookingId });
-  //   if (!booking) {
-  //     throw new AppError(httpStatus.NOT_FOUND, 'Booking not found!');
-  //   }
-  //   const car = await Car.findById({ _id: booking.carId });
-  //   if (!car) {
-  //     throw new AppError(httpStatus.NOT_FOUND, 'Car not found!');
-  //   }
-  //   const pricePerHour = car.pricePerHour ; // 500
-  //   const startTime = new Date(`1970-01-01T${booking.startTime}`); //1970-01-01T05:00:00.000Z
-  //   const endTime = new Date(`1970-01-01T${returnData.endTime}`); //  1970-01-01T07:00:00.000Z
-  //   const timeDifference =
-  //     endTime.getTime() - startTime.getTime() ;
-  //     const timeDifferenceInHours = timeDifference / 3600000;
-  //   const totalCost = Number(pricePerHour) * timeDifferenceInHours;
-  //   const commitBooking = await Booking.findByIdAndUpdate(
-  //     { _id: returnData.bookingId },
-  //     { endTime: returnData.endTime, totalCost },{session}
-  //   );
-  //   if(!commitBooking){
-  //       throw new AppError(400, 'Could not end the booking!');
-  //   }
-  //   const updateTheCarToAvailable = await Car.findByIdAndUpdate({_id:car._id},{status:"available"},{session})
-  //    if (!updateTheCarToAvailable) {
-  //      throw new AppError(400, 'Could not end the booking!');
-  //    }
-  //   await session.commitTransaction();
-  //   await session.endSession();
-  //     const bookingData = await getBookingByIdFromDB(returnData.bookingId);
-  //   return bookingData;
-  // } catch (err:any) {
-  //   await session.abortTransaction();
-  //   await session.endSession();
-  //   throw new AppError(400, err.message || 'Could not end the booking!');
-  // }
+  console.log({returnData})
+  return null
 };
 
 export const bookingServices = {
