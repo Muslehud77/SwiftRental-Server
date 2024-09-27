@@ -17,6 +17,12 @@ router.patch(
   validateRequest(bookingValidation.modifyBookingValidation),
   bookingControllers.modifyBooking,
 );
+router.put(
+  '/status',
+  Auth(USER_ROLE.admin),
+  validateRequest(bookingValidation.modifyBookingValidation),
+  bookingControllers.updateStatus,
+);
 router.delete("/:id",Auth(USER_ROLE.user),bookingControllers.deleteBookingById)
 
 
