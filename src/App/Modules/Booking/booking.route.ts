@@ -11,6 +11,7 @@ const router = express.Router();
 router.get("/",Auth(USER_ROLE.admin),bookingControllers.getAllBookings)
 router.post("/",Auth(USER_ROLE.user),validateRequest(bookingValidation.createBookingValidation),bookingControllers.bookACar)
 router.get("/my-bookings",Auth(USER_ROLE.user),bookingControllers.getBookingsByUserId)
+router.get("/dashboard-stats",Auth(USER_ROLE.admin),bookingControllers.dashboardStats)
 router.patch(
   '/:id',
   Auth(USER_ROLE.user),

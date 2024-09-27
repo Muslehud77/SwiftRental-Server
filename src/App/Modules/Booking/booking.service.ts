@@ -8,6 +8,8 @@ import { Booking } from './booking.model';
 
 import mongoose from 'mongoose';
 import { TCar } from '../Car/car.interface';
+import { Car } from '../Car/car.model';
+import { User } from '../User/user.model';
 
 const deleteBooking = async (id: string) => {
   const result = await Booking.deleteOne({ _id: id, status: 'pending' });
@@ -17,6 +19,138 @@ const deleteBooking = async (id: string) => {
   }
 
   return result;
+};
+
+
+const dashboardStats = async () => {
+  const [
+    totalUsers,
+    activeUsers,
+    blockedUsers,
+    totalBookings,
+    pendingBookings,
+    approvedBookings,
+    completedBookings,
+    totalRevenue,
+    paymentMethods,
+    avgBookingDuration,
+    mostRentedCars,
+    availableCars,
+  
+  ] = await Promise.all([
+    // Total Users
+    User.countDocuments({}),
+
+    // Active Users
+    User.countDocuments({ status: 'in-progress' }),
+
+    // Blocked Users
+    User.countDocuments({ status: 'blocked' }),
+
+    // Total Bookings
+    Booking.countDocuments({}),
+
+    // Pending Bookings
+    Booking.countDocuments({ status: 'pending' }),
+
+    // Approved Bookings
+    Booking.countDocuments({ status: 'approved' }),
+
+    // Completed Bookings
+    Booking.countDocuments({ status: 'completed' }),
+
+    // Total Revenue
+    Booking.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: '$totalCost' },
+        },
+      },
+    ]),
+
+    // Payment Method Statistics
+    Booking.aggregate([
+      {
+        $group: {
+          _id: '$paymentType',
+          count: { $sum: 1 },
+        },
+      },
+    ]),
+
+    // Average Booking Duration
+    Booking.aggregate([
+      {
+        $project: {
+          duration: {
+            $divide: [
+              { $subtract: ['$endDate', '$startDate'] },
+              1000 * 60 * 60 * 24,
+            ], // Duration in days
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          avgDuration: { $avg: '$duration' },
+        },
+      },
+    ]),
+
+    // Most Rented Cars with Car Details
+    Booking.aggregate([
+      {
+        $group: {
+          _id: '$carId',
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+      { $limit: 5 },
+      {
+        $lookup: {
+          from: 'cars', // Name of the Car collection
+          localField: '_id', // carId in Booking collection
+          foreignField: '_id', // _id in Car collection
+          as: 'carDetails',
+        },
+      },
+      { $unwind: '$carDetails' }, // Unwind the array to have single car object
+      {
+        $project: {
+          carName: '$carDetails.name', // Show car name
+          carModel: '$carDetails.model', // Show car model
+          carType: '$carDetails.carType', // Show car type
+          count: 1,
+        },
+      },
+    ]),
+
+    // Available Cars
+    Car.countDocuments(),
+
+ 
+  ]);
+
+  // Return all the gathered stats
+  return {
+    totalUsers,
+    activeUsers,
+    blockedUsers,
+    totalBookings,
+    pendingBookings,
+    approvedBookings,
+    completedBookings,
+    totalRevenue: totalRevenue[0]?.totalRevenue || 0,
+    paymentMethods,
+    avgBookingDuration: avgBookingDuration[0]?.avgDuration || 0,
+    mostRentedCars,
+    availableCars,
+   
+  };
+
 };
 
 const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
@@ -220,4 +354,5 @@ export const bookingServices = {
   deleteBooking,
   modifyBookingInDB,
   updateStatusIntoDB,
+  dashboardStats,
 };

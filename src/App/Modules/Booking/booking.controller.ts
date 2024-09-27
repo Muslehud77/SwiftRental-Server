@@ -21,6 +21,8 @@ const getBookingsByUserId = catchAsync(async (req, res) => {
 
   sendResponse<TBooking[]>(res, data);
 });
+
+
 const deleteBookingById = catchAsync(async (req, res) => {
   const bookingId = req.params.id;
 
@@ -30,6 +32,20 @@ const deleteBookingById = catchAsync(async (req, res) => {
     success: true,
     statusCode: 200,
     message: 'Booking canceled successfully!',
+    data: result,
+  };
+
+  sendResponse(res, data);
+});
+const dashboardStats = catchAsync(async (req, res) => {
+
+
+  const result = await bookingServices.dashboardStats();
+
+  const data = {
+    success: true,
+    statusCode: 200,
+    message: 'Dashboard stats retrieved successfully!',
     data: result,
   };
 
@@ -134,6 +150,6 @@ export const bookingControllers = {
   getAllBookings,
   deleteBookingById,
   modifyBooking,
-
+dashboardStats,
   updateStatus,
 };

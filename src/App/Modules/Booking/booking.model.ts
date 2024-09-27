@@ -21,7 +21,7 @@ const bookingSchema = new Schema<TBooking>(
     ],
     paymentType: {
       type: String,
-      enum: ['cash', 'stripe'],
+      enum: ['cash', 'stripe',"Aamar Pay"],
       default: 'cash',
     },
     paymentId: { type: String, default: '' },
