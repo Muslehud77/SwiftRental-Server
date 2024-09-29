@@ -1,7 +1,8 @@
 
+
 # SwiftRental
 
-SwiftRental is a comprehensive car rental reservation system that offers a smooth and secure experience for both users and administrators. It provides functionalities for user registration, car booking, and administrative control over the car inventory and bookings.
+SwiftRental is a comprehensive car rental reservation system that offers a smooth and secure experience for both users and administrators. It provides functionalities for user registration, car booking, payment processing, and administrative control over the car inventory and bookings.
 
 ## Features
 
@@ -19,8 +20,13 @@ SwiftRental is a comprehensive car rental reservation system that offers a smoot
 - **View Booking History**: Users can view their past bookings.
 - **Admin Booking Oversight**: Admins can view all bookings.
 
+### Payment Integration
+- **Stripe Payments**: Secure payment processing using Stripe.
+- **Aamarpay Payments**: Alternative payment option via Aamarpay.
+- **Payment Verification**: Integrated system for verifying payment transactions.
+
 ### Error Handling
-- Comprehensive error handling for validation, authentication, and other errors to ensure smooth user experience.
+- Comprehensive error handling for validation, authentication, payments, and other errors to ensure smooth user experience.
 
 ## Project Structure
 
@@ -33,22 +39,9 @@ SwiftRental
 │   │   │   └── QueryBuilder.ts
 │   │   ├── configs
 │   │   ├── ErrorHandler
-│   │   │   ├── customErrorHandlerFunctions
-│   │   │   │   ├── mongooseCastError.ts
-│   │   │   │   ├── mongooseDuplicateDataError.ts
-│   │   │   │   ├── mongooseQueryError.ts
-│   │   │   │   ├── mongooseValidationError.ts
-│   │   │   │   ├── zodError.ts
-│   │   │   ├── globalErrorHandler.ts
-│   │   │   └── notFound.ts
 │   │   ├── errors
-│   │   │   └── AppError.ts
 │   │   ├── interface
-│   │   │   ├── error.ts
-│   │   │   └── index.d.ts
 │   │   ├── Middlewares
-│   │   │   ├── auth.ts
-│   │   │   └── validateRequest.ts
 │   │   ├── Modules
 │   │   │   ├── Auth
 │   │   │   │   ├── auth.constant.ts
@@ -64,21 +57,25 @@ SwiftRental
 │   │   │   │   ├── booking.model.ts
 │   │   │   │   ├── booking.route.ts
 │   │   │   │   ├── booking.service.ts
-│   │   │   │   └── booking.validation.ts
+│   │   │   │   ├── booking.validation.ts
 │   │   │   ├── Car
 │   │   │   │   ├── car.controller.ts
 │   │   │   │   ├── car.interface.ts
 │   │   │   │   ├── car.model.ts
 │   │   │   │   ├── car.route.ts
 │   │   │   │   ├── car.service.ts
-│   │   │   │   └── car.validation.ts
+│   │   │   │   ├── car.validation.ts
+│   │   │   ├── Payment
+│   │   │   │   ├── payment.controller.ts
+│   │   │   │   ├── payment.route.ts
+│   │   │   │   ├── payment.service.ts
 │   │   │   ├── User
 │   │   │   │   ├── user.controller.ts
 │   │   │   │   ├── user.interface.ts
 │   │   │   │   ├── user.model.ts
 │   │   │   │   ├── user.route.ts
 │   │   │   │   ├── user.service.ts
-│   │   │   │   └── user.validation.ts
+│   │   │   │   ├── user.validation.ts
 │   ├── routes
 │   │   └── index.ts
 │   ├── utils
@@ -107,7 +104,7 @@ SwiftRental
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Muslehud77/SwiftRental
+   git clone https://github.com/Muslehud77/SwiftRental-Server
    cd SwiftRental
    ```
 
@@ -121,14 +118,25 @@ SwiftRental
 
    ```env
    NODE_ENV=development
-   PORT=6000
+   PORT=8000
+   CLIENT_URL=http://localhost:5173
+   SERVER_URL=http://localhost:8000
    DATABASE_URI=your_mongodb_uri
    HASH_SALT=12
    DEFAULT_PASS=swift123
-   JWT_ACCESS_SECRET=647ce085b2f735579953875d0c76d9a69d420bb229a733ca8aa70595e709c082
-   JWT_REFRESH_SECRET=284248d00cef99f7b3800789e67b3de84cd0210e8403eba08d80c2d7c49133c6
-   JWT_ACCESS_EXPIRES_IN=1d
+   JWT_ACCESS_SECRET=your_jwt_access_secret
+   JWT_REFRESH_SECRET=your_jwt_refresh_secret
+   JWT_ACCESS_EXPIRES_IN=10d
    JWT_REFRESH_EXPIRES_IN=365d
+
+   # Stripe Payment
+   STRIPE_SECRET=your_stripe_secret_key
+
+   # Aamarpay Payment
+   AMARPAY_URL="https://sandbox.aamarpay.com"
+   AMARPAY_PAYMENT_VERIFY_URL="https://sandbox.aamarpay.com/api/v1/trxcheck/request.php"
+   AMARPAY_STORE_ID="your_aamarpay_store_id"
+   AMARPAY_SIGNATURE_KEY="your_aamarpay_signature_key"
    ```
 
 ### Running the Application
@@ -162,3 +170,4 @@ npm run start:prod
   npm run prettier:fix
   ```
 
+---

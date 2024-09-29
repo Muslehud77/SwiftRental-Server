@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 export interface TCar {
-  
+  toObject : ()=>TCar;
   _id: string;
   name: string;
   model: string;
@@ -14,7 +14,7 @@ export interface TCar {
   pricePerDay: string;
   status?: 'available' | 'not-available';
   isDeleted: boolean;
-  availableForTheDateEntered? : string;
+  availableForTheDateEntered?: string;
 }
 
 export interface TCarStatics extends Model<TCar> {
