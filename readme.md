@@ -2,7 +2,7 @@
 
 # SwiftRental
 
-SwiftRental is a comprehensive car rental reservation system that offers a smooth and secure experience for both users and administrators. It provides functionalities for user registration, car booking, payment processing, and administrative control over the car inventory and bookings.
+SwiftRental is a comprehensive car rental reservation system that offers a smooth and secure experience for both users and administrators. It provides functionalities for user registration, car booking, payment processing, and administrative control over the car inventory, bookings, and trip management.
 
 ## Features
 
@@ -19,6 +19,8 @@ SwiftRental is a comprehensive car rental reservation system that offers a smoot
 - **Book a Ride**: Users can book cars for specific time slots.
 - **View Booking History**: Users can view their past bookings.
 - **Admin Booking Oversight**: Admins can view all bookings.
+- **Approve/Reject Booking Requests (Admin Only)**: Admins can approve or reject user booking requests.
+- **End a Trip (Admin Only)**: Admins can end ongoing trips.
 
 ### Payment Integration
 - **Stripe Payments**: Secure payment processing using Stripe.
@@ -44,44 +46,12 @@ SwiftRental
 │   │   ├── Middlewares
 │   │   ├── Modules
 │   │   │   ├── Auth
-│   │   │   │   ├── auth.constant.ts
-│   │   │   │   ├── auth.controller.ts
-│   │   │   │   ├── auth.interface.ts
-│   │   │   │   ├── auth.route.ts
-│   │   │   │   ├── auth.service.ts
-│   │   │   │   ├── auth.utils.ts
-│   │   │   │   ├── auth.validation.ts
 │   │   │   ├── Booking
-│   │   │   │   ├── booking.controller.ts
-│   │   │   │   ├── booking.interface.ts
-│   │   │   │   ├── booking.model.ts
-│   │   │   │   ├── booking.route.ts
-│   │   │   │   ├── booking.service.ts
-│   │   │   │   ├── booking.validation.ts
 │   │   │   ├── Car
-│   │   │   │   ├── car.controller.ts
-│   │   │   │   ├── car.interface.ts
-│   │   │   │   ├── car.model.ts
-│   │   │   │   ├── car.route.ts
-│   │   │   │   ├── car.service.ts
-│   │   │   │   ├── car.validation.ts
 │   │   │   ├── Payment
-│   │   │   │   ├── payment.controller.ts
-│   │   │   │   ├── payment.route.ts
-│   │   │   │   ├── payment.service.ts
 │   │   │   ├── User
-│   │   │   │   ├── user.controller.ts
-│   │   │   │   ├── user.interface.ts
-│   │   │   │   ├── user.model.ts
-│   │   │   │   ├── user.route.ts
-│   │   │   │   ├── user.service.ts
-│   │   │   │   ├── user.validation.ts
 │   ├── routes
-│   │   └── index.ts
 │   ├── utils
-│   │   ├── catchAsync.ts
-│   │   ├── sendResponse.ts
-│   │   └── app.ts
 │   └── server.ts
 ├── .env
 ├── .gitignore
@@ -104,7 +74,7 @@ SwiftRental
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Muslehud77/SwiftRental-Server
+   git clone https://github.com/Muslehud77/SwiftRental
    cd SwiftRental
    ```
 
@@ -152,6 +122,16 @@ npm run build
 npm run start:prod
 ```
 
+## Frontend Repository
+
+The frontend code for SwiftRental is available here: [SwiftRental Frontend Repo](https://github.com/Muslehud77/SwiftRental-client).
+
+## Visit the Live Frontend
+
+Click the button below to access the live frontend of SwiftRental:
+
+[![SwiftRental Frontend](https://img.shields.io/badge/Visit-Frontend-brightgreen)](https://swiftrental.vercel.app/)
+
 ### Code Quality
 
 - **Linting:**
@@ -170,4 +150,3 @@ npm run start:prod
   npm run prettier:fix
   ```
 
----
