@@ -49,11 +49,11 @@ const createUserValidation = z.object({
       url: z.string({
         required_error: 'Image URL is required',
         invalid_type_error: 'Image URL must be a string',
-      }),
+      }).optional(),
       blurHash: z.string({
         required_error: 'Image blurHash is required',
         invalid_type_error: 'Image blurHash must be a string',
-      }),
+      }).optional(),
     }).optional(),
   }),
 });
